@@ -1,0 +1,296 @@
+# The real house model, from her notes (docs/notes/weekly-routine.md).
+# Anything marked TODO or "est" is a guess to confirm with her.
+
+week_starts_on: monday
+week_mode: fresh_start          # rebuild from baseline every Monday; history keeps "last done"
+missed_items: auto_slide        # move to next slot that fits; else "whenever" tray
+daily_digest: { at_slot_start: after_little_girls_sleep }   # right after the girls go down
+
+# Slot times are SETTINGS she edits in the app; values here are only the starting seed.
+# Two schedules: weekday (Mon–Fri) and weekend (Sat–Sun). `null` = slot doesn't exist that day type.
+# Anchors are TAPS ("Girls are up", "Gigi is down"); a tap shifts that slot and offset slots after it.
+day_types:
+  weekday: [mon, tue, wed, thu, fri]
+  weekend: [sat, sun]
+
+slot_types:
+  - id: before_truman_wakes
+    name: "Before Truman wakes up"
+    rules: { noise: quiet }
+    times:
+      weekday: { start: "06:00", minutes: 30 }
+      weekend: { start: "07:00", minutes: 30 }
+  - id: after_truman_leaves
+    name: "After Truman leaves"
+    rules: { noise: quiet }          # littles may still be asleep
+    times:
+      weekday: { start: "08:30", minutes: 30 }   # Truman leaves 8:30 on weekdays
+      weekend: null
+  - id: little_girls_wake
+    name: "Little girls wake up"
+    anchor: "Girls are up"
+    times:
+      weekday: { start: "09:00", minutes: 15 }
+      weekend: { start: "08:00", minutes: 15 }
+  - id: girls_settled
+    name: "~2 hrs after girls are up"
+    offset_from: little_girls_wake
+    offset_minutes: 120
+    times:
+      weekday: { minutes: 45 }
+      weekend: { minutes: 30 }
+  - id: lunchtime
+    name: "Lunchtime"
+    times:
+      weekday: { start: "11:45", minutes: 20 }
+      weekend: { start: "12:00", minutes: 20 }
+  - id: gigi_nap
+    name: "Gigi's naptime"
+    anchor: "Gigi is down"
+    rules: { noise: quiet, no_vacuum_rooms: [gigi_room, hallway_up] }
+    times:
+      weekday: { start: "13:00", minutes: 90 }
+      weekend: { start: "13:00", minutes: 90 }
+  - id: early_evening
+    name: "Early evening"
+    times:
+      weekday: { start: "16:00", minutes: 30 }
+      weekend: { start: "16:00", minutes: 30 }
+  - id: kids_activities
+    name: "Kids' activities (transport)"
+    source: calendar                 # busy block, generated from calendar events
+    busy: true
+  - id: dinner
+    name: "Dinner time"
+    category: meals
+    times:
+      weekday: { start: "17:30", minutes: 45 }
+      weekend: { start: "17:30", minutes: 60 }
+  - id: after_little_girls_sleep
+    name: "After little girls go to sleep"
+    anchor: "Girls are down"         # also triggers the daily digest
+    rules: { noise: quiet }
+    times:
+      weekday: { start: "19:45", minutes: 45 }
+      weekend: { start: "20:00", minutes: 45 }
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ROOMS (her list). Marked TODO: floor, Roborock segment id, what the robot covers.
+# kind: bedroom | bath | living | utility | outdoor | storage
+# ─────────────────────────────────────────────────────────────────────────────
+rooms:
+  # Main living zone
+  - { id: living,        name: "Living room",          kind: living,  zone: main_living }
+  - { id: dining,        name: "Dining room",          kind: living,  zone: main_living }
+  - { id: entry,         name: "Entry way",            kind: living,  zone: main_living }
+  - { id: stairs,        name: "Stairs",               kind: living,  zone: main_living, robot: false }
+  - { id: kitchen,       name: "Kitchen",              kind: living }
+  - { id: pantries,      name: "Pantries",             kind: storage }
+  - { id: half_bath,     name: "Half bath (down)",     kind: bath,    shower: false }
+  # Utility
+  - { id: mudroom,       name: "Mud room area",        kind: utility }
+  - { id: laundry_room,  name: "Laundry room (main)",  kind: utility }
+  - { id: dog_room,      name: "Dog room",             kind: utility }
+  - { id: garage,        name: "Garage",               kind: utility, robot: false }
+  - { id: outdoor_front, name: "Outdoor (front)",      kind: outdoor, robot: false }
+  - { id: outdoor_back,  name: "Outdoor (back)",       kind: outdoor, robot: false }
+  # Bonus rooms (Thursday)
+  - { id: office,        name: "Office",               kind: living,  zone: bonus }
+  - { id: theatre,       name: "Theatre room",         kind: living,  zone: bonus }   # TODO confirm: not in her room list
+  - { id: game_room,     name: "Game room",            kind: living,  zone: bonus }   # TODO confirm: same as "upstairs"?
+  - { id: playroom,      name: "Playroom",             kind: living }
+  - { id: upstairs,      name: "Upstairs",             kind: living }                 # TODO: which space is this?
+  # Parents' side
+  - { id: master,        name: "Master",               kind: bedroom }
+  - { id: master_closet, name: "Master closet",        kind: storage }
+  - { id: master_bath,   name: "Master bath",          kind: bath }
+  - { id: hall_parents,  name: "Hallway (parents' side)", kind: living }
+  # Kids' side
+  - { id: hall_kids,     name: "Hallway (kids' side)", kind: living }
+  - { id: willow_room,   name: "Willow's room",        kind: bedroom, prefer_when: kids_at_school }
+  - { id: timmy_room,    name: "Timmy's room",         kind: bedroom, prefer_when: kids_at_school }
+  - { id: truman_room,   name: "Truman's room",        kind: bedroom, prefer_when: kids_at_school }
+  - { id: truman_bath,   name: "Truman's bath",        kind: bath }
+  - { id: girls_bath,    name: "Girls' bath",          kind: bath }
+  - { id: littles_bath,  name: "Littles' bath",        kind: bath }
+  - { id: nursery,       name: "Nursery",              kind: bedroom, never_during: [gigi_nap] }
+
+# Doors/gates between rooms: fill in during the house walk (needed for Roborock prep).
+connections: []   # e.g. - { between: [living, dog_room], type: gate }
+
+roborock:
+  entity: vacuum.roborock          # TODO: real entity id
+  dock_room: null                  # TODO
+  prep_notice_minutes: 15
+  # TODO: segment ids per room (from roborock.get_maps); which floor the map covers
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ROUTINES: reusable checklists applied to a room. Applying one to a room creates
+# per-room items, so "last done" is tracked per room.
+# minutes are ESTIMATES (est) she can correct in the app.
+# robot: true = Roborock can do it (becomes a vacuum run, not a manual task)
+# ─────────────────────────────────────────────────────────────────────────────
+routines:
+  bedroom_refresh:
+    name: "Bedroom refresh"
+    steps:
+      - { name: "New sheets",                minutes: 10 }
+      - { name: "Tidy",                      minutes: 10 }
+      - { name: "Dust",                      minutes: 5 }
+      - { name: "Wipe down surfaces",        minutes: 5 }
+      - { name: "Clean glass",               minutes: 5 }
+      - { name: "Wipe down blinds",          minutes: 5 }
+      - { name: "Vacuum",                    minutes: 0, robot: true }
+      - { name: "Finishing sprays",          ref: finishing_sprays_bedroom }
+
+  living_clean:
+    name: "Living area clean"
+    steps:
+      - { name: "Tidy",                      minutes: 10 }
+      - { name: "Dust",                      minutes: 10 }
+      - { name: "Wipe down surfaces",        minutes: 5 }
+      - { name: "Clean glass",               minutes: 5 }
+      - { name: "Polish wood surfaces",      minutes: 10 }
+      - { name: "Wipe down electronics",     minutes: 5 }
+      - { name: "Vacuum / vac-mop",          minutes: 0, robot: true }
+      - { name: "Mop (if not robot-mopped)", minutes: 15, only_if: robot_mop_failed_or_skipped }
+      - { name: "Finishing sprays",          ref: finishing_sprays_living }
+
+  bonus_room_clean:
+    name: "Bonus room clean"
+    steps:
+      - { name: "Tidy",                      minutes: 10 }
+      - { name: "Dust",                      minutes: 5 }
+      - { name: "Wipe down electronics",     minutes: 5 }
+
+  bathroom_clean:
+    name: "Bathroom clean"
+    steps:
+      - { name: "Tidy",                      minutes: 5 }
+      - { name: "Remove items from shower",  minutes: 2,  only_if: room.shower }
+      - { name: "Clean shower/tub",          minutes: 15, only_if: room.shower, supplies: [electric_scrubber] }
+      - { name: "Counters, sink, mirror",    minutes: 5 }   # TODO confirm: not in notes, assumed
+      - { name: "Toilet",                    minutes: 5 }   # TODO confirm: not in notes, assumed
+      - { name: "Pull rugs & towels for laundry", minutes: 2 }
+
+  finishing_sprays_bedroom:
+    name: "Finishing sprays (bedroom)"
+    steps:
+      - { name: "Turn on scents",            minutes: 1 }
+      - { name: "Allergy spray on beds",     minutes: 2 }
+      - { name: "Air freshener",             minutes: 1 }
+      - { name: "Fabric spray",              minutes: 2 }
+
+  finishing_sprays_living:
+    name: "Finishing sprays (living)"
+    steps:
+      - { name: "Scents",                    minutes: 1 }
+      - { name: "Allergy spray",             minutes: 2 }
+      - { name: "Fabric spray",              minutes: 2 }
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BASELINE WEEK: her themed days. Each Monday the live week is built from this.
+# Unfinished items auto-slide to the next slot that fits.
+# ─────────────────────────────────────────────────────────────────────────────
+baseline_week:
+  mon:
+    theme: "Kitchen & meals"
+    items:
+      - { laundry: [twins_clothes, truman_clothes] }
+      - { task: "Grocery order",  minutes: 20, category: meals }
+      - { task: "Meal prep",      minutes: 90, category: meals }   # TODO: which slot?
+      - { task: "Crockpot meal",  minutes: 20, category: meals, before_slot: lunchtime }
+  tue:
+    theme: "Bedrooms"
+    items:
+      - { laundry: [bedding] }
+      - { laundry: [towels], only_if: not_done_this_week }   # "towels if didn't get to it Monday"
+      - { routine: bedroom_refresh, rooms: [master, willow_room, timmy_room, truman_room, nursery] }
+  wed:
+    theme: "Living areas"
+    items:
+      - { routine: living_clean, rooms: [living, dining, entry, stairs] }
+      - { laundry: [adults_clothes, little_girls_clothes] }
+  thu:
+    theme: "Bonus rooms"
+    items:
+      - { routine: bonus_room_clean, rooms: [theatre, office, game_room] }
+  fri:
+    theme: "Bathrooms"
+    items:
+      - { routine: bathroom_clean, rooms: [master_bath, girls_bath, littles_bath, truman_bath, half_bath] }
+      - { laundry: [bath_rugs, towels, moms_clothes] }
+  sat: { theme: "Open / catch-up", items: [] }
+  sun: { theme: "Open / catch-up", items: [] }
+
+# ─────────────────────────────────────────────────────────────────────────────
+# DAILY: every day (TODO: weekends too?)
+# ─────────────────────────────────────────────────────────────────────────────
+daily:
+  - { task: "Start laundry",                 minutes: 5,  slots: [before_truman_wakes, after_truman_leaves] }
+  - { task: "Make all beds",                 minutes: 10, scope: house, room_kind: bedroom }
+  - { task: "Tidy bedrooms",                 minutes: 10, scope: house, room_kind: bedroom }
+  - { task: "Unload dishwasher",             minutes: 10, room: kitchen }
+  - { task: "Clean out sink",                minutes: 3,  room: kitchen }
+  - { task: "Wipe kitchen counters",         minutes: 5,  room: kitchen }
+  - { task: "Tidy living room",              minutes: 10, room: living }
+  - { task: "Vacuum living room",            robot: true, room: living }
+  - { task: "Vacuum dog room",               robot: true, room: dog_room }
+  - { task: "Wipe shower / rinse tubs",      minutes: 5,  scope: house, room_kind: bath, only_if: room.shower }
+  - { task: "Finishing sprays (living room)", ref: finishing_sprays_living, room: living }
+
+# Whole-house tasks from round 2
+house_tasks:
+  - { task: "Clean windows",       scope: house, every_days: 30, minutes_per_room: 10 }   # TODO frequency
+  # Electronics dusting is already covered by Wed + Thu routines; kept as "last done" per room.
+
+# Monthly: she hasn't filled this in yet. Candidates: outdoor, garage, pantries,
+# mud room, laundry room, master closet, hallways, upstairs, playroom (none are on a weekly day yet).
+monthly: []
+
+# ─────────────────────────────────────────────────────────────────────────────
+# LAUNDRY: named loads; the laundry steps (start, switch, fold, put away) are tracked per load.
+# ─────────────────────────────────────────────────────────────────────────────
+laundry_loads:
+  twins_clothes:        { name: "Twins' clothes" }
+  truman_clothes:       { name: "Truman's clothes" }
+  bedding:              { name: "Bedding" }
+  towels:               { name: "Towels" }
+  adults_clothes:       { name: "Adults' clothes" }
+  little_girls_clothes: { name: "Little girls' clothes" }
+  bath_rugs:            { name: "Bathroom rugs" }
+  moms_clothes:         { name: "Mom's clothes" }
+laundry_steps:          # TODO confirm she wants these tracked separately
+  - { step: start,   minutes: 5, slots: [before_truman_wakes, after_truman_leaves] }
+  - { step: switch,  minutes: 3, after_minutes: 60 }
+  - { step: fold,    minutes: 15 }
+
+# ─────────────────────────────────────────────────────────────────────────────
+# CLEANING CADDY: supplies; "running low" adds the item to the grocery list.
+# ─────────────────────────────────────────────────────────────────────────────
+supplies:
+  - { id: duster,            name: "Duster" }
+  - { id: glass_cleaner,     name: "Glass cleaner",        consumable: true }
+  - { id: multi_surface,     name: "Multi-surface cleaner", consumable: true }
+  - { id: cloths,            name: "Cloths" }
+  - { id: scrubber,          name: "Scrubber" }
+  - { id: electric_scrubber, name: "Electric scrubber",    charge: true }
+  - { id: allergy_spray,     name: "Allergy spray",        consumable: true }
+  - { id: fabric_spray,      name: "Fabric spray",         consumable: true }
+  - { id: air_freshener,     name: "Air freshener",        consumable: true }
+  - { id: shower_spray,      name: "Daily shower spray",   consumable: true }
+
+calendar_rules:
+  - { match: "Soccer Game", task: "Wash soccer uniform",    due_before_hours: 12 }
+  - { match: "Practice",    task: "Wash practice clothes",  window: after_event_before_next }
+
+notifications:
+  channel: ha_companion
+  immediate: [vacuum_door_closed, vacuum_stuck, vacuum_tank_empty]
+  slot_start_nudges: false
+
+meals:
+  plan_weeks_ahead: 1
+  prep_day: mon                    # from her notes (meal prep + grocery order + crockpot on Monday)
+  stores: [heb, walmart]
+  order_matching: manual           # later: Gmail order emails

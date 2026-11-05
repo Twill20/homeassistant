@@ -2,6 +2,22 @@
 
 Her answers, and what each one means for the design. Add new entries at the top as feedback comes in.
 
+## 2026-11-05: Her weekly routine (notes in `docs/notes/weekly-routine.md`)
+
+Converted into `data/house.yaml`. Design decisions it drove:
+
+- **The baseline week is built from themed days:** Mon kitchen & meals · Tue bedrooms · Wed living areas · Thu bonus rooms · Fri bathrooms · Sat/Sun open for catch‑up.
+  The Today screen shows the day's theme as its title. "Last done N days ago" is still tracked per room, so a slid Tuesday bedroom shows its age.
+- **Routines are reusable checklists applied to rooms** (Bedroom refresh, Living area clean, Bonus room clean, Bathroom clean, Finishing sprays).
+  Applying a routine to 5 bedrooms creates 5 checkable items, so she can finish one room at a time and the rest auto‑slide.
+- **Steps the robot can do are vacuum runs, not manual tasks:** daily living room + dog room, Tuesday bedrooms, Wednesday living/dining/entry.
+  The "Mop" step only appears if the robot mop was skipped or failed (her "if not using vacuum mop").
+- **Laundry is tracked as named loads** assigned to days (twins + Truman Mon, bedding Tue, adults + little girls Wed, rugs + towels + Mom Fri).
+  "Towels Tuesday if not done Monday" is a conditional item.
+- **Meals: Monday is grocery order + meal prep + crockpot day** (not the weekend, as first assumed).
+- **The cleaning caddy becomes a supplies list.** Marking "running low" adds it to the grocery list. The electric scrubber gets a "charge it" reminder the night before bathroom day.
+- **Rough load check (estimates):** Tuesday ≈ 230 min of hands‑on work plus daily tasks. That is the heaviest day and needs most of the weekday slots, so it's the first candidate for spreading out (e.g. 2–3 bedrooms Tue, the rest Sat).
+
 ## 2026-11-05: Second round of answers
 
 | # | Her answer | Design decision |
@@ -17,7 +33,6 @@ Her answers, and what each one means for the design. Add new entries at the top 
 | 9 | Plans meals **next week** | The meal planner defaults to a next‑week view, with "plan further out" available. |
 | 10 | Activity drop‑offs/pickups are **on the calendar with consistent names** | Keyword rules can reliably create busy blocks and laundry deadlines. |
 
-**Coming next from her:** a notes doc with example tasks and the real room names. It will replace the placeholder rooms and tasks in `data/house.example.yaml`.
 
 ## 2026-11-05: First round of answers
 

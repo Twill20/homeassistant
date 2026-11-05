@@ -69,3 +69,26 @@ Answer these over coffee or a date night. Short answers are fine, and "I don't k
 8. **Meals:** which apps do you use today for recipes and planning? Are HEB / Walmart / Instacart order emails going to one Gmail address?
 9. **Meals:** how far ahead do you like to plan: next week, or a month?
 10. **Kids' activities:** are pickups and drop‑offs already events on the family calendar, with consistent names?
+
+---
+
+## Round 3 (from her weekly routine notes)
+
+**Rooms**
+1. "Stairs" is listed twice. Is that two staircases (front/back, or up/down)?
+2. Theatre room and game room appear on Thursday but not in the room list. Is "upstairs" the game room, or a separate space?
+3. Which floor is each room on, and which rooms should the Roborock clean? (Stairs, garage and outdoor are excluded; is anything else?)
+4. Who uses which bathroom: girls' bath, littles' bath, Truman's bath? Who are the twins?
+
+**Routine**
+5. Tuesday bedrooms: all five (master, Willow, Timmy, Truman, nursery)? That's the heaviest day. Would she rather split it (e.g. kids' rooms Tue while they're at school, master Sat)?
+6. Does "Daily" include weekends too?
+7. Bathroom day: should we add counters/sink/mirror/toilet, or are those handled another way?
+8. Monday meal prep: which slot usually (nap? after bedtime?), and roughly how long?
+9. Laundry: track just "start", or also switch → fold → put away? Who folds and puts away for the older kids?
+
+**Monthly (empty in her notes)**
+10. Rooms with no weekly day yet: outdoor, garage, pantries, mud room, laundry room, master closet, hallways, playroom, upstairs. What should happen in each, and how often (every 2 weeks, monthly, quarterly)?
+
+**Time**
+11. Rough minutes for a bedroom refresh, a bathroom clean, and the Wednesday living‑area routine? (These drive how much fits in a nap.)
