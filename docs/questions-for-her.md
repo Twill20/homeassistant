@@ -54,3 +54,18 @@ Answer these over coffee or a date night. Short answers are fine, and "I don't k
 ## Access and devices
 32. Phone type (iPhone or Android)? Do you already use the Home Assistant app?
 33. Would a wall tablet or kitchen display be nice later, next to Skylight?
+
+---
+
+## Round 2 (after her first answers; see `docs/decisions.md`)
+
+1. **Digest timing:** is right after the little girls go to sleep the best time for the daily summary, or later once things are quiet?
+2. **Slot start times:** roughly when does each slot start, and how long is it? Do any slots differ on weekends?
+3. **Anchors:** would you tap "Girls are up" / "Gigi is down" so later slots shift? Or should the app just use typical times?
+4. **Truman:** which days does Truman leave, and roughly when? (This defines the "after Truman leaves" slot.)
+5. **Slot nudges:** digest only to start? Or also a single "here's this slot's plan" nudge at certain slots (e.g. Gigi's nap)?
+6. **Notification app:** OK to install the Home Assistant app *only* so notifications can have Done / Snooze / Move buttons? You'd never need to open it.
+7. **House vs. room:** which tasks do you think of as "across the whole house" (dusting, floors, trash, windows)?
+8. **Meals:** which apps do you use today for recipes and planning? Are HEB / Walmart / Instacart order emails going to one Gmail address?
+9. **Meals:** how far ahead do you like to plan: next week, or a month?
+10. **Kids' activities:** are pickups and drop‑offs already events on the family calendar, with consistent names?
