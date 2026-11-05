@@ -1,0 +1,116 @@
+# Example house model. Copy to house.yaml and fill in together during Phase 0.
+# This file seeds the planner's database and documents "the house" in version control.
+
+week_starts_on: sunday
+
+slot_types:
+  - id: early_am
+    name: "Early AM (before littles wake)"
+    default_time: "06:30"
+    minutes: 30
+    days: [mon, tue, wed, thu, fri]
+    rules: { noise: quiet }
+  - id: after_dropoff
+    name: "After school drop-off"
+    default_time: "08:15"
+    minutes: 45
+    days: [mon, tue, wed, thu, fri]
+    rules: { noise: any }
+  - id: nap
+    name: "Nap time"
+    default_time: "13:00"
+    minutes: 90
+    days: [mon, tue, wed, thu, fri, sat, sun]
+    rules: { noise: quiet, no_vacuum_rooms: [nursery, hallway_up] }
+  - id: evening
+    name: "After bedtime"
+    default_time: "20:00"
+    minutes: 30
+    days: [sun, mon, tue, wed, thu]
+    rules: { noise: quiet }
+
+rooms:
+  - id: kitchen
+    name: Kitchen
+    floor: 1
+    roborock_segment: 16      # from roborock.get_maps
+    vacuum_every_days: 2
+    mop_every_days: 7
+  - id: living
+    name: Living Room
+    floor: 1
+    roborock_segment: 17
+    vacuum_every_days: 3
+  - id: playroom
+    name: Playroom
+    floor: 1
+    roborock_segment: 18
+    vacuum_every_days: 4
+    prep: ["Pick up floor toys"]
+  - id: older_girls_room
+    name: Older Girls' Room
+    floor: 1
+    roborock_segment: 19
+    vacuum_every_days: 7
+    prefer_when: kids_at_school
+  - id: nursery
+    name: Nursery
+    floor: 1
+    roborock_segment: 20
+    vacuum_every_days: 7
+    never_during: [nap]
+
+# Connections between rooms. The planner computes reachability from the dock.
+connections:
+  - between: [kitchen, living]
+    type: open
+  - between: [living, playroom]
+    type: gate
+    sensor: binary_sensor.playroom_gate   # optional
+  - between: [living, older_girls_room]
+    type: door
+  - between: [living, nursery]
+    type: door
+
+roborock:
+  entity: vacuum.roborock
+  dock_room: kitchen
+  prep_notice_minutes: 15
+
+tasks:
+  - name: "Kitchen reset"
+    room: kitchen
+    minutes: 20
+    every_days: 1
+    slots: [after_dropoff, nap, evening]
+  - name: "Wipe bathroom counters"
+    room: older_girls_bath
+    minutes: 10
+    every_days: 3
+  - name: "Change sheets"
+    room: older_girls_room
+    minutes: 20
+    every_days: 7
+    category: deep
+
+routines:
+  - name: "Girls' bathroom deep clean"
+    every_days: 7
+    tasks: ["Scrub tub", "Toilet", "Mirror", "Floor"]
+
+quotas:
+  - name: "Laundry: Kid A"
+    per_week: 3
+    minutes: 10          # time to start/move the load
+    slots: [early_am, after_dropoff]
+  - name: "Mailbox"
+    per_week: 3
+    assignee: kid_b
+
+calendar_rules:
+  - match: "Soccer Game"
+    task: "Wash soccer uniform"
+    due_before_hours: 12
+  - match: "Practice"
+    task: "Wash practice clothes"
+    window: after_event_before_next
