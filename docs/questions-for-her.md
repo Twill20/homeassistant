@@ -57,7 +57,7 @@ Answer these over coffee or a date night. Short answers are fine, and "I don't k
 
 ---
 
-## Round 2 (after her first answers; see `docs/decisions.md`)
+## Round 2: answered ✓ (see `docs/decisions.md`)
 
 1. **Digest timing:** is right after the little girls go to sleep the best time for the daily summary, or later once things are quiet?
 2. **Slot start times:** roughly when does each slot start, and how long is it? Do any slots differ on weekends?

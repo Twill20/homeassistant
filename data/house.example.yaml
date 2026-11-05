@@ -4,60 +4,75 @@
 week_starts_on: monday
 week_mode: fresh_start          # rebuild from baseline every Monday; history keeps "last done"
 missed_items: auto_slide        # move to next slot that fits; else "whenever" tray
-daily_digest_slot: after_little_girls_sleep
+daily_digest: { at_slot_start: after_little_girls_sleep }   # right after the girls go down
 
-# Her slots, in daily order. Times/minutes are placeholders to tune together.
-# `anchor`: a tap ("Girls are up") or HA signal that shifts this slot and those after it.
+# Slot times are SETTINGS she edits in the app; values here are only the starting seed.
+# Two schedules: weekday (Mon–Fri) and weekend (Sat–Sun). `null` = slot doesn't exist that day type.
+# Anchors are TAPS ("Girls are up", "Gigi is down"); a tap shifts that slot and offset slots after it.
+day_types:
+  weekday: [mon, tue, wed, thu, fri]
+  weekend: [sat, sun]
+
 slot_types:
   - id: before_truman_wakes
     name: "Before Truman wakes up"
-    default_time: "05:45"
-    minutes: 30
     rules: { noise: quiet }
+    times:
+      weekday: { start: "06:00", minutes: 30 }
+      weekend: { start: "07:00", minutes: 30 }
   - id: after_truman_leaves
     name: "After Truman leaves"
-    default_time: "07:30"
-    minutes: 30
-    days: [mon, tue, wed, thu, fri]
     rules: { noise: quiet }          # littles may still be asleep
+    times:
+      weekday: { start: "08:30", minutes: 30 }   # Truman leaves 8:30 on weekdays
+      weekend: null
   - id: little_girls_wake
     name: "Little girls wake up"
-    default_time: "08:00"
-    minutes: 15
     anchor: "Girls are up"
+    times:
+      weekday: { start: "09:00", minutes: 15 }
+      weekend: { start: "08:00", minutes: 15 }
   - id: girls_settled
     name: "~2 hrs after girls are up"
     offset_from: little_girls_wake
     offset_minutes: 120
-    minutes: 45
+    times:
+      weekday: { minutes: 45 }
+      weekend: { minutes: 30 }
   - id: lunchtime
     name: "Lunchtime"
-    default_time: "11:45"
-    minutes: 20
+    times:
+      weekday: { start: "11:45", minutes: 20 }
+      weekend: { start: "12:00", minutes: 20 }
   - id: gigi_nap
     name: "Gigi's naptime"
-    default_time: "13:00"
-    minutes: 90
     anchor: "Gigi is down"
     rules: { noise: quiet, no_vacuum_rooms: [gigi_room, hallway_up] }
+    times:
+      weekday: { start: "13:00", minutes: 90 }
+      weekend: { start: "13:00", minutes: 90 }
   - id: early_evening
     name: "Early evening"
-    default_time: "16:00"
-    minutes: 30
+    times:
+      weekday: { start: "16:00", minutes: 30 }
+      weekend: { start: "16:00", minutes: 30 }
   - id: kids_activities
     name: "Kids' activities (transport)"
-    source: calendar                 # busy block, generated from events
+    source: calendar                 # busy block, generated from calendar events
     busy: true
   - id: dinner
     name: "Dinner time"
-    default_time: "17:30"
-    minutes: 45
     category: meals
+    times:
+      weekday: { start: "17:30", minutes: 45 }
+      weekend: { start: "17:30", minutes: 60 }
   - id: after_little_girls_sleep
     name: "After little girls go to sleep"
-    default_time: "19:45"
-    minutes: 45
+    anchor: "Girls are down"         # also triggers the daily digest
     rules: { noise: quiet }
+    times:
+      weekday: { start: "19:45", minutes: 45 }
+      weekend: { start: "20:00", minutes: 45 }
 
 rooms:
   - id: kitchen
@@ -114,11 +129,17 @@ tasks:
     minutes: 20
     every_days: 1
     slots: [girls_settled, gigi_nap, after_little_girls_sleep]
-  - name: "Dust everywhere"
+  # Whole-house tasks (her picks): windows and electronics dusting.
+  - name: "Dust electronics"
     scope: house              # done across rooms; progress tracked per room
     minutes_per_room: 5
     every_days: 7
     rooms: [living, playroom, older_girls_room]
+  - name: "Clean windows"
+    scope: house
+    minutes_per_room: 10
+    every_days: 30
+    rooms: [kitchen, living, playroom, older_girls_room, nursery]
   - name: "Wipe bathroom counters"
     scope: room
     room: older_girls_bath
@@ -152,12 +173,12 @@ calendar_rules:
     window: after_event_before_next
 
 notifications:
-  channel: ha_companion          # iPhone; HA app used only as the notification pipe
+  channel: ha_companion          # iPhone; HA app installed only as the notification pipe (she agreed)
   immediate: [vacuum_door_closed, vacuum_stuck, vacuum_tank_empty]
-  slot_start_nudges: false       # digest-only to start; turn on per slot if she wants
+  slot_start_nudges: false       # her choice: daily digest only for now; can enable per slot later
 
 meals:
-  plan_weeks_ahead: 4
+  plan_weeks_ahead: 1            # she plans next week; app still allows further out
   prep_slots: [after_little_girls_sleep]   # plus weekend prep session
   stores: [heb, walmart]
-  order_matching: manual         # later: email
+  order_matching: manual         # phase 2: read order emails from her Gmail (HEB/Walmart/Instacart all go there)

@@ -175,12 +175,13 @@ Each phase is usable on its own. Ship, let her use it for a week or two, gather 
 - [ ] "Next up" list driven by due score
 - [ ] Auto‑slide of missed items to the next fitting slot; "whenever" tray
 - [ ] Monday fresh start from the baseline
+- [ ] **Settings → Slots:** edit start time and length per slot for Weekday and Weekend schedules
+- [ ] Tap anchors on Today: Girls are up · Gigi is down · Girls are down
 - [ ] Home‑screen PWA on her iPhone, served over Tailscale HTTPS
 
 ### Phase 3: Nudges and flexibility
 - [ ] Daily digest (done, moved count, one improvement idea)
-- [ ] Optional slot‑start nudges with Done / Snooze / Move / Skip (via the HA Companion app as a notification channel only)
-- [ ] Slot anchors ("Girls are up") that shift later slots
+- [ ] Notifications via the HA Companion app (digest + vacuum blockers); slot‑start nudges built but **off** by default
 - [ ] Skip this week, light‑week mode, close slot/day
 
 ### Phase 4: Vacuum in the planner

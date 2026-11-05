@@ -2,6 +2,23 @@
 
 Her answers, and what each one means for the design. Add new entries at the top as feedback comes in.
 
+## 2026-11-05: Second round of answers
+
+| # | Her answer | Design decision |
+|---|---|---|
+| 1 | Digest **right after the girls go to sleep** | The digest is sent when she taps "Girls are down" (or at that slot's usual time if she doesn't tap). |
+| 2 | Slot times are **a setting**; weekends differ | **Settings → Slots** screen with two schedules: **Weekday** (Mon–Fri) and **Weekend** (Sat–Sun). A slot can be turned off for one day type (e.g. "After Truman leaves" is weekdays only). Per‑day overrides can come later if needed. |
+| 3 | Anchors by **tap** | Big buttons on Today: **Girls are up · Gigi is down · Girls are down**. Each tap shifts that slot and the slots that follow it. No HA sensors needed. |
+| 4 | Truman leaves **weekdays at 8:30** | "After Truman leaves" = weekdays from 08:30. |
+| 5 | **Daily digest only** for now | Slot‑start nudges are off. The only other alerts are the three vacuum blockers. |
+| 6 | OK to install the **HA app just for notifications** | Notification route A: the HA Companion app delivers notifications with action buttons. |
+| 7 | Whole‑house tasks: **windows, electronics dusting** | Seeded as `scope: house`. Everything else is per room unless she toggles it. |
+| 8 | Order emails all go to **one Gmail** | The meals phase can read a Gmail label for HEB, Walmart and Instacart confirmations. |
+| 9 | Plans meals **next week** | The meal planner defaults to a next‑week view, with "plan further out" available. |
+| 10 | Activity drop‑offs/pickups are **on the calendar with consistent names** | Keyword rules can reliably create busy blocks and laundry deadlines. |
+
+**Coming next from her:** a notes doc with example tasks and the real room names. It will replace the placeholder rooms and tasks in `data/house.example.yaml`.
+
 ## 2026-11-05: First round of answers
 
 | # | Her answer | Design decision |
