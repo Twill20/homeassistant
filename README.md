@@ -4,6 +4,7 @@ A calm cleaning planner for our house: themed days, time slots that follow the f
 check‑offs with "last done N days ago", and missed items that quietly slide to the next open slot.
 v0.1 covers cleaning and laundry. Roborock, notifications, calendar and meals come next (see the build plan).
 
+- [Notes for Claude / handoff](CLAUDE.md)
 - [Architecture and build plan](docs/build-plan.md)
 - [Decision log](docs/decisions.md)
 - [Questions to answer together](docs/questions-for-her.md)
