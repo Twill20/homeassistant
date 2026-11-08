@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+<header class="dayhead"><div><h1>Settings</h1><p class="sub">Changes apply to new weeks. Use “Re-plan rest of this week” to apply them now.</p></div></header>
+
+<section class="card">
+  <h2>Time slots</h2>
+  <form method="post" action="/settings/slots" class="slotform">
+    <div class="sfhead"><span></span><span>Weekdays</span><span>Weekends</span></div>
+    {% for s in slots %}
+    <input type="hidden" name="{{ s.id }}__present" value="1">
+    <div class="sfrow">
+      <span class="sfname">{{ s.name }}{% if s.offset_from %}<small> starts {{ s.offset_minutes }} min after “Girls are up”</small>{% endif %}</span>
+      {% for p in ['wd', 'we'] %}
+      <span class="sfcell">
+        <label class="tog"><input type="checkbox" name="{{ s.id }}__{{ p }}_on" {{ 'checked' if s[p ~ '_on'] }}> on</label>
+        {% if not s.offset_from %}<input type="time" name="{{ s.id }}__{{ p }}_start" value="{{ s[p ~ '_start'] or '' }}">{% endif %}
+        <input type="number" min="0" step="5" name="{{ s.id }}__{{ p }}_minutes" value="{{ s[p ~ '_minutes'] or '' }}" aria-label="minutes"> min
+      </span>
+      {% endfor %}
+    </div>
+    {% endfor %}
+    <button class="primary">Save slots</button>
+  </form>
+</section>
+
+<section class="card">
+  <h2>Tasks</h2>
+  <p><a class="button" href="/task/new">+ Add a task</a></p>
+  {% for g in groups %}
+  <details>
+    <summary class="slothead"><span class="slotname">{{ g.label }}{% if g.theme %} · {{ g.theme }}{% endif %}</span><span class="slottime">{{ g.tasks|length }}</span></summary>
+    <ul class="tasklist">
+      {% for t in g.tasks %}
+      <li class="{{ '' if t.active else 'off' }}"><a href="/task/{{ t.id }}">{{ t.name }}{% if t.room_name %} · {{ t.room_name }}{% endif %}</a>
+        <small>{% if t.robot %}robot{% else %}{{ t.minutes }} min{% endif %}{% if not t.active %} · paused{% endif %}</small></li>
+      {% endfor %}
+    </ul>
+  </details>
+  {% endfor %}
+</section>
+
+<section class="card">
+  <h2>This week</h2>
+  <form method="post" action="/week/rebuild"><button>Re-plan rest of this week</button></form>
+  <p class="sub">Keeps everything already done or skipped.</p>
+</section>
+{% endblock %}

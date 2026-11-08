@@ -1,0 +1,6 @@
+<ul class="recap">
+  <li><b>{{ sm.done }}</b> thing{{ 's' if sm.done != 1 }} done{% if sm.rooms %}: {{ sm.rooms|join(', ') }} refreshed{% endif %}.</li>
+  <li><b>{{ sm.moved }}</b> moved to a better time.</li>
+  {% if sm.tip %}<li class="tip">{{ sm.tip }}</li>{% endif %}
+  {% if sm.tomorrow %}<li>{{ sm.tomorrow }}</li>{% endif %}
+</ul>

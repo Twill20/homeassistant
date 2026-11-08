@@ -2,6 +2,18 @@
 
 Her answers, and what each one means for the design. Add new entries at the top as feedback comes in.
 
+## 2026-11-08: Round 4 answers and v0.1 built
+
+- Georgia = **Gigi**, so her room is quiet during Gigi's nap. **Playroom = nursery.** **Game room = theatre** (floor 2).
+- The **upstairs bath is not** on Friday bathroom day. **Mud room = dog room**, with a door near Truman's bath (which confirms that bath).
+- The Roborock **dock** is in the living room, outside the nursery.
+- **Home Assistant** runs standalone on a Raspberry Pi. The **planner runs on the home PC** (Windows, already runs Python apps), started from a .bat file with no Docker.
+  HA integration (v0.2) will call the Pi's API over the LAN.
+- **v0.1 built** (`homerhythm/`): Today/Week/Recap/Settings, tap anchors, auto‑slide, Whenever tray, skip, close slot,
+  weekday/weekend slot settings, task editor, re‑plan, and "last done". On the first open mid‑week, it only plans the days remaining.
+- **Time zone** is assumed to be Central (America/Chicago). Change `HOMERHYTHM_TZ` if that's wrong.
+- **Still guessed:** which bath is the girls' bath (by Timmy's room?) and which is the littles' bath (between Georgia's room and the office?), plus all slot times and task minutes. She'll tune these in Settings.
+
 ## 2026-11-08: Floor plan and launch target
 
 - **Floor plan** (`docs/notes/floor-plan.jpg`): everything is on floor 1 except the **theatre room / guest suite** (floor 2, the only room up there; this is "upstairs" in her list).

@@ -1,0 +1,51 @@
+{% macro item_card(it, targets, compact=false) %}
+<div class="item {{ it.status }}{% if it.robot %} robot{% endif %}" id="item-{{ it.id }}">
+  <div class="row">
+    <form method="post" action="/item/{{ it.id }}/toggle">
+      <button class="check" aria-label="{{ 'Undo' if it.status == 'done' else 'Done' }}">{% if it.status == 'done' %}✓{% endif %}</button>
+    </form>
+    <details class="body">
+      <summary>
+        <span class="name">{{ it.name }}{% if it.room %} <span class="room">· {{ it.room }}</span>{% endif %}</span>
+        <span class="meta">
+          {% if it.robot %}🤖 Roborock{% else %}{{ it.minutes }} min{% endif %}
+          · last done {{ it.ago }}
+          {% if it.steps %} · {{ it.steps_done }}/{{ it.steps|length }}{% endif %}
+          {% if it.moved %} · <span class="moved">moved {{ it.moved }}×</span>{% endif %}
+          {% if it.status == 'skipped' %} · <b>skipped this week</b>{% endif %}
+        </span>
+      </summary>
+      {% if it.note %}<p class="note">{{ it.note }}</p>{% endif %}
+      {% if it.steps %}
+      <ul class="steps">
+        {% for st in it.steps %}
+        <li>
+          <form method="post" action="/item/{{ it.id }}/step/{{ st.i }}">
+            <button class="step {{ 'done' if st.done }}"><span class="box">{% if st.done %}✓{% endif %}</span>{{ st.name }}{% if st.ago %} <small>{{ st.ago }}</small>{% endif %}</button>
+          </form>
+        </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {% if it.status != 'done' and not it.robot %}
+      <div class="actions">
+        {% if it.status == 'skipped' %}
+          <form method="post" action="/item/{{ it.id }}/move"><button name="to" value="unskip">Un-skip</button></form>
+        {% else %}
+          <form method="post" action="/item/{{ it.id }}/move"><button name="to" value="next">Next slot</button></form>
+          {% if not it.daily %}<form method="post" action="/item/{{ it.id }}/move"><button name="to" value="tomorrow">Tomorrow</button></form>{% endif %}
+          {% if not it.daily %}<form method="post" action="/item/{{ it.id }}/move"><button name="to" value="tray">Whenever</button></form>{% endif %}
+          <form method="post" action="/item/{{ it.id }}/move"><button name="to" value="skip" class="quiet">Skip this week</button></form>
+          <form method="post" action="/item/{{ it.id }}/move" class="moveto">
+            <select name="to" aria-label="Move to">
+              {% for g in targets %}<optgroup label="{{ g.day }}">{% for o in g.opts %}<option value="{{ o.value }}">{{ o.label }}</option>{% endfor %}</optgroup>{% endfor %}
+            </select>
+            <button>Move</button>
+          </form>
+        {% endif %}
+      </div>
+      {% endif %}
+    </details>
+  </div>
+</div>
+{% endmacro %}

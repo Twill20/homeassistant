@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% from "_macros.html" import item_card %}
+{% block content %}
+<header class="dayhead"><div><h1>This week</h1><p class="sub">Week of {{ monday.strftime('%b') }} {{ monday.day }} · starts fresh every Monday</p></div></header>
+
+{% if tray_items %}
+<section class="slot">
+  <details open>
+    <summary class="slothead"><span class="slotname">Whenever</span><span class="slottime">no room left this week; move or skip</span></summary>
+    {% for it in tray_items %}{{ item_card(it, targets) }}{% endfor %}
+  </details>
+</section>
+{% endif %}
+
+{% for dc in days %}
+<section class="slot {{ 'now' if dc.is_today }}">
+  <details {% if dc.d >= now.date() %}open{% endif %}>
+    <summary class="slothead">
+      <span class="slotname">{{ dc.day_name }}{% if dc.theme %} · {{ dc.theme }}{% endif %}</span>
+      <span class="slottime">{{ dc.done_count }}/{{ dc.total_count }} done</span>
+    </summary>
+    {% for sv in dc.slots if sv.its %}
+      <h3 class="minihead">{{ sv.s.name }} <small>{{ sv.s.label() }}</small></h3>
+      {% for it in sv.its %}{{ item_card(it, targets) }}{% endfor %}
+    {% endfor %}
+    {% if dc.anytime %}<h3 class="minihead">Anytime</h3>{% for it in dc.anytime %}{{ item_card(it, targets) }}{% endfor %}{% endif %}
+    <p class="end"><a href="/day/{{ dc.d.isoformat() }}">Open {{ dc.day_name }} →</a></p>
+  </details>
+</section>
+{% endfor %}
+{% endblock %}

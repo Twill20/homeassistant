@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Home Rhythm</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Rhythm">
+  <meta name="theme-color" content="#5b7f6a">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/static/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/static/icon-180.png">
+  <link rel="stylesheet" href="/static/app.css">
+  <script src="/static/htmx.min.js"></script>
+  <script>htmx.config.scrollIntoViewOnBoost = false;</script>
+</head>
+<body hx-boost="true">
+  <main class="wrap">
+    {% block content %}{% endblock %}
+  </main>
+  <nav class="tabs">
+    <a href="/" class="{{ 'on' if page == 'today' }}">Today</a>
+    <a href="/week" class="{{ 'on' if page == 'week' }}">Week{% if tray %} <span class="pill">{{ tray }}</span>{% endif %}</a>
+    <a href="/summary" class="{{ 'on' if page == 'summary' }}">Recap</a>
+    <a href="/settings" class="{{ 'on' if page == 'settings' }}">Settings</a>
+  </nav>
+</body>
+</html>

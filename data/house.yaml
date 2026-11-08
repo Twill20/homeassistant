@@ -92,18 +92,17 @@ rooms:
   - { id: stairs,        name: "Stairs",               floor: 1, kind: living, robot: false }  # one staircase, south hallway → theatre
   # Floor 1: west / utility wing
   - { id: laundry_room,  name: "Laundry room (main)",  floor: 1, kind: utility }   # (10)
-  - { id: mudroom,       name: "Mud room area",        floor: 1, kind: utility }   # TODO(confirm): west hallway by the laundry?
-  - { id: dog_room,      name: "Dog room",             floor: 1, kind: utility }   # (10) "Dogs"
+  - { id: dog_room,      name: "Dog room / mud room",  floor: 1, kind: utility }   # (10) "Dogs" = the mud room
   - { id: truman_room,   name: "Truman's room",        floor: 1, kind: bedroom, prefer_when: kids_at_school }   # (1)
-  - { id: truman_bath,   name: "Truman's bath",        floor: 1, kind: bath }      # TODO(confirm): bath between the dog room and laundry?
+  - { id: truman_bath,   name: "Truman's bath",        floor: 1, kind: bath }      # between the dog room and laundry
   # Floor 1: south kids' wing (off the south hallway by the stairs)
   - { id: hall_kids,     name: "Hallway (kids' side)", floor: 1, kind: living }
   - { id: willow_room,   name: "Willow's room",        floor: 1, kind: bedroom, prefer_when: kids_at_school }   # (2)
   - { id: timmy_room,    name: "Timmy's room",         floor: 1, kind: bedroom, prefer_when: kids_at_school }   # (3)
   - { id: girls_bath,    name: "Girls' bath",          floor: 1, kind: bath }      # TODO(confirm): the bath next to Timmy's room?
   # Floor 1: north wing (off the living room)
-  - { id: nursery,       name: "Nursery",              floor: 1, kind: bedroom, never_during: [gigi_nap] }   # (4)
-  - { id: georgia_room,  name: "Georgia's room",       floor: 1, kind: bedroom }   # (5); TODO(confirm): is Georgia "Gigi"? If so: never_during gigi_nap
+  - { id: nursery,       name: "Nursery / playroom",   floor: 1, kind: bedroom, never_during: [gigi_nap] }   # (4) nursery = playroom
+  - { id: georgia_room,  name: "Georgia's room",       floor: 1, kind: bedroom, never_during: [gigi_nap] }   # (5) Georgia = Gigi
   - { id: littles_bath,  name: "Littles' bath",        floor: 1, kind: bath }      # TODO(confirm): bath between Georgia's room and the office?
   - { id: office,        name: "Office",               floor: 1, kind: living, zone: bonus }   # (6)
   # Floor 1: parents' wing (off the entry)
@@ -111,12 +110,9 @@ rooms:
   - { id: master,        name: "Master",               floor: 1, kind: bedroom }   # (7)
   - { id: master_bath,   name: "Master bath",          floor: 1, kind: bath }
   - { id: master_closet, name: "Master closet",        floor: 1, kind: storage }
-  # Location not on the plan
-  - { id: playroom,      name: "Playroom",             floor: 1, kind: living }               # TODO(confirm): where? same as game room?
-  - { id: game_room,     name: "Game room",            floor: 1, kind: living, zone: bonus }  # TODO(confirm): where? same as playroom?
   # Floor 2: the only room upstairs ("upstairs" in her list)
-  - { id: theatre,       name: "Theatre room / guest suite", floor: 2, kind: living, zone: bonus, robot: false }   # (8)
-  - { id: theatre_bath,  name: "Upstairs bath",        floor: 2, kind: bath }      # TODO(confirm): include on bathroom day?
+  - { id: theatre,       name: "Theatre / game room",  floor: 2, kind: living, zone: bonus, robot: false }   # (8) game room = theatre = "upstairs"
+  - { id: theatre_bath,  name: "Upstairs bath",        floor: 2, kind: bath }      # not on Friday bathroom day
   # Outside / garage
   - { id: garage,        name: "Garage",               kind: utility, robot: false }
   - { id: outdoor_front, name: "Outdoor (front)",      kind: outdoor, robot: false }
@@ -142,7 +138,7 @@ connections:
   - { between: [kitchen, hall_west],     type: open }
   - { between: [hall_west, truman_room], type: door }
   - { between: [hall_west, laundry_room], type: door }
-  - { between: [laundry_room, dog_room], type: gate }     # TODO(confirm): via the small bath/hall?
+  - { between: [laundry_room, dog_room], type: door }     # door near Truman's bath
   - { between: [kitchen, hall_kids],     type: open }
   - { between: [hall_kids, willow_room], type: door }
   - { between: [hall_kids, timmy_room],  type: door }
@@ -154,7 +150,7 @@ routing_nodes: [hall_north, hall_west]
 roborock:
   entity: vacuum.roborock          # TODO: real entity id
   map_floor: 1                     # floor 2 (theatre) is manual, or carry the robot up
-  dock_room: null                  # TODO: where is the dock?
+  dock_room: living                # outside the nursery/playroom
   prep_notice_minutes: 15
   # TODO: segment ids per room (from roborock.get_maps)
 
@@ -248,7 +244,7 @@ baseline_week:
   thu:
     theme: "Bonus rooms"
     items:
-      - { routine: bonus_room_clean, rooms: [theatre, office, game_room] }
+      - { routine: bonus_room_clean, rooms: [theatre, office] }
   fri:
     theme: "Bathrooms"
     items:
@@ -279,7 +275,7 @@ house_tasks:
   # Electronics dusting is already covered by Wed + Thu routines; kept as "last done" per room.
 
 # Monthly: she hasn't filled this in yet. Candidates: outdoor, garage, pantries,
-# mud room, laundry room, master closet, hallways, playroom (none are on a weekly day yet).
+# laundry room, master closet, hallways (none are on a weekly day yet).
 monthly: []
 
 # ─────────────────────────────────────────────────────────────────────────────

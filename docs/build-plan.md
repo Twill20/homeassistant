@@ -150,7 +150,7 @@ A breadth‑first search from the dock's room shows which rooms the robot can re
 
 ---
 
-## 6a. Launch plan: v0.1 in her hands Monday Nov 16
+## 6a. Launch plan: v0.1 (built Nov 8; testing the week of Nov 9)
 
 **Where it runs:** the planner runs **at home** (home computer, or next to HA), because it needs to reach HA and the Roborock on the home network and family data stays private.
 Development can happen in Claude Code cloud sessions (code lives on GitHub). Switch to Claude Code **on the home computer** when we start the HA/Roborock integration, so it can test against the real devices.

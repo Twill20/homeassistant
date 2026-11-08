@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<header class="dayhead"><div><h1>{{ 'Edit task' if t else 'New task' }}</h1></div></header>
+<form method="post" action="/task/save" class="card taskform">
+  {% if t %}<input type="hidden" name="id" value="{{ t.id }}">{% endif %}
+  <label>Name <input name="name" value="{{ t.name if t else '' }}" required></label>
+  <label>Room
+    <select name="room_id">
+      <option value="">— none / whole house —</option>
+      {% for r in rooms %}<option value="{{ r.id }}" {{ 'selected' if t and t.room_id == r.id }}>{{ r.name }}</option>{% endfor %}
+    </select>
+  </label>
+  <label>Minutes <input type="number" min="0" step="5" name="minutes" value="{{ t.minutes if t else 15 }}"></label>
+  <fieldset><legend>Which days</legend>
+    <label class="tog"><input type="checkbox" name="days" value="daily" {{ 'checked' if 'daily' in days }}> Every day</label>
+    {% for k, n in dows %}<label class="tog"><input type="checkbox" name="days" value="{{ k }}" {{ 'checked' if k in days }}> {{ n[:3] }}</label>{% endfor %}
+  </fieldset>
+  <fieldset><legend>Preferred slots (optional)</legend>
+    {% for s in slots %}<label class="tog"><input type="checkbox" name="prefs" value="{{ s.id }}" {{ 'checked' if s.id in prefs }}> {{ s.name }}</label>{% endfor %}
+  </fieldset>
+  <label>Checklist steps (one per line)
+    <textarea name="steps" rows="6">{{ steps_text }}</textarea>
+  </label>
+  <label class="tog"><input type="checkbox" name="robot" {{ 'checked' if t and t.robot }}> Done by the Roborock</label>
+  <label class="tog"><input type="checkbox" name="active" {{ 'checked' if not t or t.active }}> Active</label>
+  <div class="actions"><button class="primary">Save</button> <a href="/settings">Cancel</a></div>
+</form>
+{% endblock %}

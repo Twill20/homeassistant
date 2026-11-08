@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block content %}
+<header class="dayhead"><div><h1>Today's recap</h1><p class="sub">{{ now.strftime('%A') }}</p></div></header>
+<section class="card summary">{% include "_summary.html" %}</section>
+{% endblock %}

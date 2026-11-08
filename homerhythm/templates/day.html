@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% from "_macros.html" import item_card %}
+{% block content %}
+<header class="dayhead">
+  <a class="nav" href="/day/{{ prev.isoformat() }}" aria-label="Previous day">‹</a>
+  <div>
+    <h1>{{ theme or day_name }}</h1>
+    <p class="sub">{{ day_name }}, {{ d.strftime('%b') }} {{ d.day }}{% if total_count %} · {{ done_count }} of {{ total_count }} done{% endif %}</p>
+  </div>
+  <a class="nav" href="/day/{{ next.isoformat() }}" aria-label="Next day">›</a>
+</header>
+
+{% if is_today and anchors %}
+<section class="anchors">
+  {% for s in anchors %}
+  <form method="post" action="/anchor/{{ s.id }}">
+    {% if s.anchored %}
+      <button class="anchor on" name="clear" value="1" title="Tap to undo">✓ {{ s.anchor }} · {{ fmt_time(s.start) }}</button>
+    {% else %}
+      <button class="anchor">{{ s.anchor }}</button>
+    {% endif %}
+  </form>
+  {% endfor %}
+</section>
+{% endif %}
+
+{% if summary %}
+<section class="card summary">
+  <h2>Today's recap</h2>
+  {% include "_summary.html" %}
+</section>
+{% endif %}
+
+{% for sv in slots %}
+<section class="slot {{ sv.state }}{% if sv.s.closed %} closed{% endif %}">
+  <details {% if sv.state != 'past' or sv.left %}open{% endif %}>
+    <summary class="slothead">
+      <span class="slotname">{{ sv.s.name }}{% if sv.state == 'now' %} <span class="nowpill">now</span>{% endif %}</span>
+      <span class="slottime">{{ sv.s.label() }}{% if sv.its %} · {{ sv.used }}/{{ sv.s.minutes }} min{% endif %}</span>
+    </summary>
+    {% if sv.s.closed %}
+      <div class="empty">Closed today. Items moved on.
+        <form method="post" action="/slot/{{ d.isoformat() }}/{{ sv.s.id }}/close" class="inline"><button name="reopen" value="1" class="link">Reopen</button></form></div>
+    {% else %}
+      {% for it in sv.its %}{{ item_card(it, targets) }}{% else %}<p class="empty">Free time.</p>{% endfor %}
+      {% if sv.state != 'past' and sv.its %}
+      <form method="post" action="/slot/{{ d.isoformat() }}/{{ sv.s.id }}/close" class="inline end"><button class="link">Can't use this slot today</button></form>
+      {% endif %}
+    {% endif %}
+  </details>
+</section>
+{% endfor %}
+
+{% if anytime %}
+<section class="slot">
+  <details open>
+    <summary class="slothead"><span class="slotname">Anytime today</span><span class="slottime">didn't fit a slot</span></summary>
+    {% for it in anytime %}{{ item_card(it, targets) }}{% endfor %}
+  </details>
+</section>
+{% endif %}
+
+{% if robot %}
+<section class="slot">
+  <details open>
+    <summary class="slothead"><span class="slotname">Robot</span><span class="slottime">tick when the Roborock has run</span></summary>
+    {% for it in robot %}{{ item_card(it, targets) }}{% endfor %}
+  </details>
+</section>
+{% endif %}
+{% endblock %}
