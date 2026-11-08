@@ -2,6 +2,15 @@
 
 Her answers, and what each one means for the design. Add new entries at the top as feedback comes in.
 
+## 2026-11-08: Floor plan and launch target
+
+- **Floor plan** (`docs/notes/floor-plan.jpg`): everything is on floor 1 except the **theatre room / guest suite** (floor 2, the only room up there; this is "upstairs" in her list).
+  The Roborock map covers floor 1; the theatre is manual. **Georgia's room** (5) was added as a bedroom, and Tuesday now has 6 bedrooms.
+  Room placement and door/gate connections were drafted from the plan; guesses are marked `TODO(confirm)` in `data/house.yaml`.
+- **Target:** v0.1 (cleaning scheduler only) in her hands **Mon Nov 16**. See build plan §6a.
+- **Runs locally at home**; development continues in the cloud until the HA/Roborock work starts.
+- **Frontend simplified** to server‑rendered htmx (no build step) for speed and easy tinkering. "Move to…" buttons are used instead of drag‑and‑drop on the phone.
+
 ## 2026-11-05: Her weekly routine (notes in `docs/notes/weekly-routine.md`)
 
 Converted into `data/house.yaml`. Design decisions it drove:

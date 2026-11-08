@@ -41,7 +41,8 @@ The Roborock, door sensors, presence and actionable phone notifications already 
 
 ### Suggested tech stack (boring on purpose, so it's easy to change)
 - **Backend:** Python + FastAPI + SQLite (via SQLModel/SQLAlchemy). Python matches HA's ecosystem.
-- **Frontend:** SvelteKit or React + a drag‑and‑drop library (e.g. `dnd-kit`/`svelte-dnd-action`), mobile‑first.
+- **Frontend (updated for a fast launch):** server‑rendered pages with **htmx** + a little Alpine.js. There's no Node build step, it's one Python process, and it's easy for you to tweak.
+  On a phone, "Move to…" buttons beat drag‑and‑drop. Drag‑and‑drop on the week board can come later.
 - **Scheduler:** APScheduler inside the backend for slot reminders and vacuum kick‑offs (or HA automations that call the app).
 - **Config as data:** rooms, doors, slots and task templates live in the DB but can be seeded and exported from YAML (see `data/house.example.yaml`). This lets you version‑control "the house".
 
@@ -148,6 +149,34 @@ A breadth‑first search from the dock's room shows which rooms the robot can re
   3. **Later:** watch for any official integrations or her other meal apps' export features.
 
 ---
+
+## 6a. Launch plan: v0.1 in her hands Monday Nov 16
+
+**Where it runs:** the planner runs **at home** (home computer, or next to HA), because it needs to reach HA and the Roborock on the home network and family data stays private.
+Development can happen in Claude Code cloud sessions (code lives on GitHub). Switch to Claude Code **on the home computer** when we start the HA/Roborock integration, so it can test against the real devices.
+
+| When | Do |
+|---|---|
+| **Tonight (no code)** | In the Roborock app: schedule a daily run of **living + dining + entry + dog room** at a time outside Gigi's nap. That covers her two daily vacuum tasks right away. |
+| **Mon–Wed** | Build v0.1 (below) from `data/house.yaml`. |
+| **Thu** | Run it on the home computer; set up Tailscale on both phones; add it to her home screen. |
+| **Fri–Sun** | 15‑minute walkthrough with her; she fixes slot times and task minutes in Settings; confirm the TODO(confirm) rooms. |
+| **Mon Nov 16** | Week 1 starts fresh from her themed baseline. |
+| **Sun Nov 22** | First feedback session; pick v0.2 items together. |
+
+**v0.1 scope (cleaning scheduler only):**
+- Seed from `data/house.yaml`: rooms, routines, themed baseline week, daily tasks, laundry loads, slots
+- **Today screen:** day theme, her slots for weekday/weekend, current slot expanded, tap anchors (Girls are up · Gigi is down · Girls are down)
+- Check off; every item shows **"last done N days ago"**
+- **Auto‑slide** unfinished items to the next slot with room; "whenever" tray
+- Per item: **Move to…** (next slot / pick a slot / tomorrow) · **Skip this week**
+- **Close this slot** (e.g. appointment): its items slide
+- **Week view:** list by day with the same Move actions
+- **Settings:** slot times (weekday/weekend), task minutes, edit or add tasks
+- **Evening summary card** in the app (done, moved, one suggestion). It becomes a push notification in v0.2.
+- Monday fresh start; completion history kept
+
+**Deferred to v0.2+:** push notifications (HA Companion), Roborock control from the app plus prep and failure alerts, calendar rules (uniforms, activity blocks), meals and grocery, supplies, scorecard.
 
 ## 6. Phased build plan
 

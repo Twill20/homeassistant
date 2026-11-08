@@ -92,3 +92,17 @@ Answer these over coffee or a date night. Short answers are fine, and "I don't k
 
 **Time**
 11. Rough minutes for a bedroom refresh, a bathroom clean, and the Wednesday living‑area routine? (These drive how much fits in a nap.)
+
+---
+
+## Round 4 (from the floor plan)
+1. Is **Georgia** "Gigi"? (Then her room is quiet during Gigi's nap too.)
+2. Which bath is which?
+   - the bath between the dog room and the laundry (Truman's?)
+   - the bath next to Timmy's room (girls'?)
+   - the bath between Georgia's room and the office (littles'?)
+   - the small bath by the living‑room closet (half bath?)
+3. Where are the **playroom** and **game room**? Are they the same room? Is the game room part of the theatre upstairs?
+4. Is the **upstairs bath** cleaned on Friday bathroom day?
+5. Where is the **mud room area**, and is the dog room behind a gate?
+6. Where is the Roborock **dock**? Does it ever go upstairs?
